@@ -1,10 +1,7 @@
 import axios from 'axios';
 import {getHeadersWithToken} from '../utils/getHeadersWithToken';
-// const API_BASE_URL = " https://1cb9-103-211-190-130.ngrok-free.app"; 
-// const API_BASE_URL = "http://192.168.238.96:8080" 
-// const API_BASE_URL =  "https://b5b1-2409-40c2-2a-d6ea-601c-5234-a2d2-9366.ngrok-free.app"
-// const API_BASE_URL = "https://dbb3-2409-40c2-1019-286-b9a8-7ff2-379c-97c8.ngrok-free.app"
-const API_BASE_URL = "https://3573-103-121-153-151.ngrok-free.app"
+
+const API_BASE_URL = "https://f37f-103-121-153-151.ngrok-free.app"
 import StorageUtils from '../utils/storage_utils';
 
 const apiClient = axios.create({
