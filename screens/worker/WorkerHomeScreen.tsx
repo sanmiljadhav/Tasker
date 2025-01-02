@@ -6,12 +6,34 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { useSetFcmToken } from '../../api/apiMutations';
 import messaging from '@react-native-firebase/messaging';
 import StorageUtils from '../../utils/storage_utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 
 const WorkerHomeScreen: React.FC = () => {
   const { mutate: setFcmToken } = useSetFcmToken();
+
+  const saveNotification = async (remoteMessage:any) => {
+    const newNotification = {
+      id: Date.now().toString(),
+      title: remoteMessage.notification?.title || 'New Notification',
+      message: remoteMessage.notification?.body || 'No message content',
+      timestamp: new Date().toLocaleString(),
+      workerEmail:remoteMessage.data.assigneeEmail
+    };
+
+    console.log("REMOTE MESSAGE IS", remoteMessage)
+
+    console.log("NEW NOTIFICATION TITLE IS", newNotification)
+  
+    const storedNotifications = await AsyncStorage.getItem('notifications');
+    const updatedNotifications = storedNotifications
+      ? [...JSON.parse(storedNotifications), newNotification]
+      : [newNotification];
+  
+    await AsyncStorage.setItem('notifications', JSON.stringify(updatedNotifications));
+  };
 
   useEffect(() =>{
 
@@ -25,7 +47,9 @@ const WorkerHomeScreen: React.FC = () => {
     setFcmToken();
 
      // Foreground message listener to display notification in the foreground
+     
      const unsubscribe = messaging().onMessage(async remoteMessage => {
+      saveNotification(remoteMessage);
       // Show a local notification when the app is in the foreground
       //   PushNotification.localNotification({
       //     title: remoteMessage.notification?.title,
